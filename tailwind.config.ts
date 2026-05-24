@@ -4,18 +4,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Encore brand palette mirrored
-        navy: "#0A1F44",
-        "navy-deep": "#051026",
-        "navy-mid": "#0F2956",
-        sky: "#0f3d91",
-        red: "#B22234",
-        "red-bright": "#dc2f42",
-        amber: "#FFB000",
-        "amber-bright": "#FFC638",
-        "amber-deep": "#d69100",
-        ink: "#101828",
-        "ink-soft": "#1a2332",
+        ink: "#0e1422",
+        surface: "#141b2d",
+        surface2: "#1b2238",
+        muted: "#94a3b8",
+        light: "#cbd5e1",
+        text: "#f1f5f9",
+        accent: "#fbbf24",
+        accent2: "#f59e0b",
+        accent3: "#d97706",
+        edge: "#475569",
       },
     },
   },
