@@ -53,17 +53,21 @@ export default function Home() {
       {/* Credibility strip */}
       <section className="border-y border-accent/20 bg-gradient-to-r from-surface/40 via-surface2/40 to-surface/40 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-10 md:py-12">
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12 text-center">
+          <div className="grid md:grid-cols-4 gap-6 md:gap-10 text-center">
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-accent mb-2">Weeks → Hours</div>
+              <div className="text-2xl md:text-3xl font-bold text-accent mb-2">Weeks → Hours</div>
               <div className="text-sm text-muted">Senior-CO depth at a CO-team pace</div>
             </div>
-            <div className="md:border-x md:border-white/10">
-              <div className="text-3xl md:text-4xl font-bold text-accent mb-2">10 Dimensions</div>
+            <div className="md:border-l md:border-white/10">
+              <div className="text-2xl md:text-3xl font-bold text-accent mb-2">10 Dimensions</div>
               <div className="text-sm text-muted">Beyond the standard four-axis match</div>
             </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-accent mb-2">Protest-Defensible</div>
+            <div className="md:border-l md:border-white/10">
+              <div className="text-2xl md:text-3xl font-bold text-accent mb-2">4 Methodology Scopes</div>
+              <div className="text-sm text-muted">Personal, Team, Agency, Federation</div>
+            </div>
+            <div className="md:border-l md:border-white/10">
+              <div className="text-2xl md:text-3xl font-bold text-accent mb-2">Protest-Defensible</div>
               <div className="text-sm text-muted">Auditable reasoning chain on every decision</div>
             </div>
           </div>
@@ -110,6 +114,28 @@ export default function Home() {
             <Reveal delay={dimensions.length * 60}>
               <LockedCard count={10 - dimensions.length} />
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Methodology Library teaser */}
+      <section className="py-20 md:py-24">
+        <div className="max-w-5xl mx-auto px-6">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-medium tracking-wider uppercase border border-accent/30 text-accent bg-accent/5 mb-6">Methodology Library</span>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
+            Methodologies that travel with you, your team, and your agency.
+          </h2>
+          <p className="text-lg text-light leading-relaxed mb-6 max-w-4xl">
+            A methodology in EADIE is more than a weighted set of dimensions. It bundles the procedures a senior CO has refined over a career, the AI prompt templates they have built, the sources they trust, and the disclosure controls they require. Methodologies are versionable, shareable, and improve over time as observed acquisition outcomes feed back into calibration.
+          </p>
+          <p className="text-base text-muted leading-relaxed mb-10 max-w-4xl">
+            EADIE also ingests your accumulated institutional knowledge: prior sources sought responses, capability statements obtained outside of structured database channels, predecessor CO market research memoranda. The AI assistant grounds its reasoning in your library alongside public source data.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <ScopeBadge label="Personal" body="Yours alone" />
+            <ScopeBadge label="Team" body="Shared within a contracting office" />
+            <ScopeBadge label="Agency" body="Published as agency standard" />
+            <ScopeBadge label="Federation" body="Cross-agency, opt-in" />
           </div>
         </div>
       </section>
@@ -181,9 +207,12 @@ export default function Home() {
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             <FeatureBlock title="Federal-first by design" body="EADIE is built for the Federal Acquisition Regulation, agency supplements, GAO protest precedent, and the realities of how contracting offices operate. Not a civilian tool retrofitted for government." />
+            <FeatureBlock title="Ingests your institutional knowledge" body="Prior sources sought responses, capability statements, predecessor CO market research memoranda. The accumulated knowledge of a 20-year CO finally becomes part of the workspace the AI can reason against." />
             <FeatureBlock title="Gated premium tier" body="Available as a stand-alone application and as a gated add-on to existing federal procurement platforms. Per-user, team, or office-wide entitlement." />
             <FeatureBlock title="Compound learning across acquisitions" body="Methodologies improve over time based on observed outcomes. Anonymized workspace data tightens dimension scoring and refines default methodology profiles." />
-            <FeatureBlock title="U.S. Provisional Patent Application Filed" body="EADIE&apos;s multi-dimensional evaluation framework, methodology-as-object architecture, stateful workflow with persistent context-bound AI assistant, and audit-trail-grounded refinement chat are subject to a pending U.S. provisional patent application." />
+          </div>
+          <div className="mt-6">
+            <FeatureBlock title="U.S. Provisional Patent Application Filed" body="EADIE&apos;s multi-dimensional evaluation framework, methodology-as-object architecture, stateful workflow with persistent context-bound AI assistant, audit-trail-grounded refinement chat, multi-modal document ingestion, and saved-procedure/saved-prompt extensions are subject to a pending U.S. provisional patent application." />
           </div>
         </div>
       </section>
@@ -367,5 +396,14 @@ function FeatureBlock({ title, body }: { title: string; body: string }) {
       <h3 className="text-lg font-bold text-accent mb-3">{title}</h3>
       <p className="text-sm text-light leading-relaxed">{body}</p>
     </article>
+  );
+}
+
+function ScopeBadge({ label, body }: { label: string; body: string }) {
+  return (
+    <div className="rounded-xl border border-amber/30 bg-amber/5 p-5 text-center hover:bg-amber/10 hover:border-amber/50 transition-all">
+      <div className="text-base font-bold text-accent mb-1">{label}</div>
+      <div className="text-xs text-light leading-relaxed">{body}</div>
+    </div>
   );
 }
