@@ -93,12 +93,12 @@ export default function Home() {
       <section id="dimensions" className="py-20 md:py-28 bg-surface/30 backdrop-blur-sm border-y border-white/5">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-medium tracking-wider uppercase border border-accent/30 text-accent bg-accent/5 mb-6">The Ten Dimensions</span>
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-medium tracking-wider uppercase border border-accent/30 text-accent bg-accent/5 mb-6">A 10-Dimension Framework</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               The evaluation framework, end to end.
             </h2>
             <p className="text-light max-w-3xl mx-auto">
-              Each dimension is independently scorable, weightable, explainable, and accessible to the AI assistant as a conversational surface during the workflow.
+              EADIE evaluates contractors across ten distinct dimensions. A representative sample is shown below. The full framework, scoring methodology, and integration architecture are covered under NDA in a federal briefing.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -107,6 +107,9 @@ export default function Home() {
                 <DimensionCard num={d.num} title={d.title} body={d.body} />
               </Reveal>
             ))}
+            <Reveal delay={dimensions.length * 60}>
+              <LockedCard count={10 - dimensions.length} />
+            </Reveal>
           </div>
         </div>
       </section>
@@ -119,26 +122,26 @@ export default function Home() {
             Pause anywhere. Ask anything. Resume with refinements applied.
           </h2>
           <p className="text-lg text-light leading-relaxed mb-12 max-w-4xl">
-            Senior contracting officers do not run wizards end to end and then refine. They run, stop, think, refine, run, stop, think, refine, dozens of times per acquisition. EADIE is built around that reality. A persistent AI assistant travels with you across every step, bound to your active workspace, grounded only in your loaded methodology, your ingested data, and your prior decisions.
+            Senior contracting officers do not work in a straight line. They run, stop, think, refine, run again. EADIE is built around that reality. An AI assistant travels with your analysis, lets you pause to ask questions, refine inputs, and resume, with everything captured for protest review.
           </p>
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <Reveal delay={0}>
-              <WorkflowStep num="01" title="Pause" body="At any moment, in any step, you ask. The workspace state freezes in place. The AI assistant is already loaded with everything you have configured, ingested, and scored." />
+              <WorkflowStep num="01" title="Pause" body="At any moment in any step, ask the AI assistant. The analysis holds in place while you think." />
             </Reveal>
             <Reveal delay={120}>
-              <WorkflowStep num="02" title="Refine" body="Suggested adjustments to weights, sources, dealbreakers, or dimensions are tagged as applied (workspace state updates and re-scores) or observational (logged but no change). Every exchange enters the audit trail." />
+              <WorkflowStep num="02" title="Refine" body="Adjust weights, sources, or assumptions based on the conversation. Every exchange enters the audit trail." />
             </Reveal>
             <Reveal delay={240}>
-              <WorkflowStep num="03" title="Resume" body="Continue the analysis with refinements incorporated. Session-spanning persistence lets you close and resume days later, or hand the workspace to a teammate with full reasoning context intact." />
+              <WorkflowStep num="03" title="Resume" body="Continue with refinements incorporated. Close the session and pick up later with full context preserved." />
             </Reveal>
           </div>
           <div className="rounded-2xl border border-accent/20 bg-gradient-to-b from-white/[0.04] to-transparent backdrop-blur-sm p-8 md:p-10">
-            <h3 className="text-xl md:text-2xl font-bold text-accent mb-4">Workspace forking and collaboration, built in</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-accent mb-4">Built for the way senior COs actually work</h3>
             <p className="text-light leading-relaxed mb-3">
-              Run a what-if analysis in parallel without losing the original. Hand a workspace to a junior CO with the full reasoning chain preserved. Promote a methodology from personal to team to agency to federation level. Methodology knowledge transfers as a side effect of normal use.
+              EADIE supports parallel analysis paths, handoff between contracting officers, and methodology sharing across a contracting office. The deeper architecture is covered under NDA in a federal briefing.
             </p>
             <p className="text-muted text-sm leading-relaxed">
-              Every refinement, every pause, every conversational exchange is captured in a configurable audit trail with disclosure controls the contracting officer sets per methodology.
+              Every pause, every refinement, every conversational exchange is captured in a configurable audit trail.
             </p>
           </div>
         </div>
@@ -157,10 +160,8 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6">
             <AuditItem title="Sources Sought Memo" body="The market research document, grounded in the analysis with full citation trail." />
             <AuditItem title="Decision Matrix" body="Per-dimension scores, weights, and resulting ranking, with every cell traceable to a source." />
-            <AuditItem title="Counter-Argument Package" body="For each top-ranked contractor, the strongest argument against, with documented response." />
-            <AuditItem title="CO Justification Statement" body="Narrative explaining the methodology applied and why it produces a defensible award basis." />
-            <AuditItem title="Reasoning Trail" body="Summarized assistant exchange history by default. Full transcripts available on request. CO controls per methodology." />
-            <AuditItem title="Protest-Defense Brief" body="Pre-staged response to the three most likely protest grounds for the acquisition type and award decision." />
+            <AuditItem title="Protest-Defense Brief" body="Pre-staged response to the most statistically likely protest grounds for the acquisition type and award decision." />
+            <LockedAuditItem />
           </div>
         </div>
       </section>
@@ -288,15 +289,10 @@ export default function Home() {
 
 const dimensions = [
   { num: "01", title: "Adjacent-Capability Match", body: "Surface contractors who have done something harder than the requirement, on a comparable axis, even when the literal industry-code match misses them." },
-  { num: "02", title: "Modern-Methodology Premium", body: "Score the methodology-modernity of each contractor against the requirement's methodology-sensitivity. Reward modern delivery where it produces better outcomes." },
-  { num: "03", title: "Incumbent-Overcommitment Risk", body: "Quantify the realistic risk of degraded delivery when a giant incumbent's current obligation pipeline exceeds their estimated capacity." },
-  { num: "04", title: "Specialized-Domain Depth", body: "Industry codes are coarse. Surface the contractors who have actually worked the specific system, regulation, or agency the requirement touches." },
-  { num: "05", title: "Geographic and Cultural Fit", body: "For requirements that benefit from local presence, weight contractors by surge-response capability, regional labor pool, and historical work in the region." },
-  { num: "06", title: "Innovation Trajectory", body: "Direction matters. Trailing trend across R&D investment, technical hiring, patents, SBIR pipeline, and publication activity." },
-  { num: "07", title: "Subcontractor Network Quality", body: "Evaluate the prime plus the planned or historical sub stack as a network. Flag where a weak prime has a strong network and vice versa." },
-  { num: "08", title: "Counter-Concentration Value", body: "Where category concentration exceeds policy-defined thresholds, surface qualified alternatives outside the top-N incumbents." },
-  { num: "09", title: "Set-Aside-Beyond-Set-Aside", body: "Treat set-aside status as one dimension among many. Surface contractors who match across multiple beneficial dimensions simultaneously." },
-  { num: "10", title: "Cost-of-Failure Asymmetry", body: "Quantify the asymmetric expected cost of contractor failure per archetype. Frame the risk-of-award decision honestly." },
+  { num: "02", title: "Specialized-Domain Depth", body: "Industry codes are coarse. Surface the contractors who have actually worked the specific system, regulation, or agency the requirement touches." },
+  { num: "03", title: "Geographic and Cultural Fit", body: "For requirements that benefit from local presence, weight contractors by surge-response capability, regional labor pool, and historical work in the region." },
+  { num: "04", title: "Innovation Trajectory", body: "Direction matters. Trailing trend across R&D investment, technical hiring, patents, SBIR pipeline, and publication activity." },
+  { num: "05", title: "Cost-of-Failure Asymmetry", body: "Quantify the asymmetric expected cost of contractor failure per archetype. Frame the risk-of-award decision honestly." },
 ];
 
 function DimensionCard({ num, title, body }: { num: string; title: string; body: string }) {
@@ -324,6 +320,43 @@ function AuditItem({ title, body }: { title: string; body: string }) {
     <article className="rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6">
       <h3 className="text-base font-bold text-accent mb-2">{title}</h3>
       <p className="text-sm text-light leading-relaxed">{body}</p>
+    </article>
+  );
+}
+
+function LockedCard({ count }: { count: number }) {
+  return (
+    <article className="h-full rounded-2xl border border-dashed border-white/15 bg-white/[0.02] backdrop-blur-sm p-7 flex flex-col justify-center items-center text-center hover:bg-white/[0.04] hover:border-accent/30 transition-all duration-300">
+      <div className="mb-4 w-12 h-12 rounded-full border border-accent/30 bg-accent/5 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div className="text-xs font-bold tracking-widest text-accent mb-2">+{count} MORE DIMENSIONS</div>
+      <p className="text-sm text-muted leading-relaxed">
+        The remaining dimensions, scoring methodology, and integration architecture are covered under NDA in a federal briefing.
+      </p>
+      <a href="#contact" className="mt-4 text-xs text-accent hover:underline uppercase tracking-wider font-semibold">
+        Request briefing →
+      </a>
+    </article>
+  );
+}
+
+function LockedAuditItem() {
+  return (
+    <article className="rounded-xl border border-dashed border-white/15 bg-white/[0.02] backdrop-blur-sm p-6 flex flex-col justify-center">
+      <div className="flex items-center gap-2 mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <h3 className="text-base font-bold text-accent">Additional audit components</h3>
+      </div>
+      <p className="text-sm text-muted leading-relaxed">
+        Counter-argument synthesis, CO justification statement, configurable reasoning trail, and related components are covered under NDA.
+      </p>
     </article>
   );
 }
