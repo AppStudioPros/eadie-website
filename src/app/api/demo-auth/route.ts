@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
-const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "EADIE-Briefing-2026";
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "Encore2026";
 const SESSION_COOKIE = "eadie_demo_session";
-const SESSION_MAX_AGE = 60 * 60 * 24 * 14; // 14 days
+const SESSION_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function sessionTokenFor(password: string): string {
   let h = 5381;

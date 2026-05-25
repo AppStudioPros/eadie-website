@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 // Demo gate — cookie-based session after branded login at /demo/login.
 // Single shared password distributed by Encore Services. Override via env.
 
-const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "EADIE-Briefing-2026";
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "Encore2026";
 const SESSION_COOKIE = "eadie_demo_session";
 
 // Session token = sha-256-ish marker derived from the password. If the password
