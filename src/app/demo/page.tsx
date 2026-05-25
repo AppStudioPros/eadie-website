@@ -504,8 +504,15 @@ export default function DemoPage() {
           <div className="text-xs text-amber font-semibold uppercase tracking-wider mb-2">
             Confidential · For Recipient Eyes Only · Encore Services LLC
           </div>
-          <div className="text-xs text-muted">
+          <div className="text-xs text-muted mb-4">
             © {new Date().getFullYear()} Encore Services, LLC. All rights reserved. U.S. Provisional Patent Application Filed.
+          </div>
+          <div className="text-xs text-muted flex items-center justify-center gap-4">
+            <Link href="/terms" className="hover:text-accent transition-colors">Terms of Service</Link>
+            <span>·</span>
+            <Link href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+            <span>·</span>
+            <Link href="/disclosures" className="hover:text-accent transition-colors">Disclosures</Link>
           </div>
         </div>
       </footer>

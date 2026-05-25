@@ -62,8 +62,15 @@ export default function LoginPage() {
           <div className="text-[10px] uppercase tracking-[0.2em] text-accent mb-1">
             Confidential · Encore Services LLC
           </div>
-          <div className="text-xs text-muted">
+          <div className="text-xs text-muted mb-3">
             U.S. Provisional Patent Application Filed.
+          </div>
+          <div className="text-xs text-muted flex items-center justify-center gap-4">
+            <a href="/terms" className="hover:text-accent transition-colors">Terms of Service</a>
+            <span>·</span>
+            <a href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</a>
+            <span>·</span>
+            <a href="/disclosures" className="hover:text-accent transition-colors">Disclosures</a>
           </div>
         </div>
       </footer>
