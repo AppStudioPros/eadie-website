@@ -1,9 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+
 export function Watermark() {
+  const pathname = usePathname();
+  // Hide watermark on login (clean auth surface) — show on actual demo content
+  if (pathname?.startsWith("/demo/login")) return null;
+
   const today = new Date().toISOString().slice(0, 10);
   const text = `EADIE DEMO · CONFIDENTIAL · ENCORE SERVICES LLC · ${today}`;
-  // 6 lines of repeated text, rotated, diagonally across the page
   const lines = Array.from({ length: 12 }, (_, i) => i);
 
   return (
