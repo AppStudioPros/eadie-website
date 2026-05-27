@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { AcumenChatPanel } from "@/components/AcumenChatPanel";
 
 // ============================================================================
 // Types (mirrors the Python service schema)
@@ -385,6 +386,13 @@ export function WorkspaceClient({ scenario }: { scenario: ScenarioFull }) {
           </button>
         </div>
       )}
+
+      {/* Floating Acumen-7 chat panel - opens automatically when analysis completes */}
+      <AcumenChatPanel
+        scenarioKey={scenario.key}
+        scenarioTitle={scenario.title}
+        analysisComplete={analysisComplete}
+      />
 
       {/* Analysis in progress / complete */}
       {analysisStarted && (
