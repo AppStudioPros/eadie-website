@@ -1,7 +1,34 @@
 import Link from "next/link";
 import { SandboxConnectionCheck } from "@/components/SandboxConnectionCheck";
 
-export default function SandboxPage() {
+interface Scenario {
+  key: string;
+  title: string;
+  agency: string;
+  ceiling_usd: number;
+  set_aside: string | null;
+}
+
+async function fetchScenarios(): Promise<Scenario[]> {
+  const apiUrl = process.env.EADIE_API_URL || "http://localhost:8000";
+  try {
+    const res = await fetch(`${apiUrl}/scenarios`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.scenarios || [];
+  } catch {
+    return [];
+  }
+}
+
+export const dynamic = "force-dynamic";
+
+export default async function SandboxPage() {
+  const scenarios = await fetchScenarios();
+
   return (
     <main className="relative min-h-screen text-text z-10">
       {/* Sandbox header */}
@@ -13,7 +40,9 @@ export default function SandboxPage() {
             </div>
             <div className="flex flex-col">
               <span className="font-bold tracking-tight leading-none">Encore · EADIE</span>
-              <span className="text-[10px] text-accent leading-none mt-0.5 uppercase tracking-widest">Sandbox · Live</span>
+              <span className="text-[10px] text-accent leading-none mt-0.5 uppercase tracking-widest">
+                Sandbox · Live
+              </span>
             </div>
           </Link>
           <div className="flex items-center gap-4 text-xs">
@@ -34,58 +63,152 @@ export default function SandboxPage() {
             Sandbox · Live Working Demonstration · Pre-Decisional
           </span>
           <span className="text-muted">
-            Encore Services, LLC · Pending U.S. Provisional Patent Application
+            Encore Services, LLC · U.S. Provisional Patent Application Filed
           </span>
         </div>
       </div>
 
-      {/* Hero / current state */}
-      <section className="py-20 md:py-24">
-        <div className="max-w-5xl mx-auto px-6">
+      {/* Hero + engine status */}
+      <section className="pt-16 pb-10">
+        <div className="max-w-6xl mx-auto px-6">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-medium tracking-wider uppercase border border-accent/30 text-accent bg-accent/5 mb-6">
-            EADIE Sandbox · Phase 1 · Foundation
+            EADIE Sandbox · Phase 1
           </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6">
-            Live working sandbox.
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-4">
+            Choose an acquisition.
+            <span className="block text-accent">Run the analysis.</span>
           </h1>
-          <p className="text-lg md:text-xl text-light max-w-3xl leading-relaxed mb-10">
-            This is the real-software companion to the EADIE walkthrough. Pre-seeded acquisition
-            scenarios, real document parsing, real Acumen-7 analysis, real audit-trail export.
-            Build in progress.
+          <p className="text-lg text-light max-w-3xl leading-relaxed mb-8">
+            Each scenario below is a real-shape federal acquisition with pre-ingested
+            documents, candidate vendors, and a loaded methodology. Tap a card to load
+            the workspace, then run the ten-dimension EADIE analysis with live Acumen-7
+            reasoning grounded in cited evidence.
           </p>
-
-          {/* Connection check, verifies the Python API is reachable end-to-end */}
           <SandboxConnectionCheck />
+        </div>
+      </section>
 
-          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6 md:p-7 max-w-3xl">
-            <div className="text-[10px] uppercase tracking-[0.2em] text-amber mb-3">
-              What&rsquo;s coming
-            </div>
-            <ul className="space-y-2 text-sm text-light leading-relaxed">
-              <li className="flex gap-3">
-                <span className="mt-2 w-1 h-1 rounded-full bg-amber flex-shrink-0"></span>
-                Three pre-seeded acquisition scenarios (VAMC Janitorial, VBA IT Help Desk, OSDBU Outreach)
-              </li>
-              <li className="flex gap-3">
-                <span className="mt-2 w-1 h-1 rounded-full bg-amber flex-shrink-0"></span>
-                Live document ingestion with drag-drop PDF parsing
-              </li>
-              <li className="flex gap-3">
-                <span className="mt-2 w-1 h-1 rounded-full bg-amber flex-shrink-0"></span>
-                Real-time multi-dimension scoring across five live AI dimensions
-              </li>
-              <li className="flex gap-3">
-                <span className="mt-2 w-1 h-1 rounded-full bg-amber flex-shrink-0"></span>
-                Context-bound Acumen-7 chat panel, grounded in workspace state
-              </li>
-              <li className="flex gap-3">
-                <span className="mt-2 w-1 h-1 rounded-full bg-amber flex-shrink-0"></span>
-                Audit-trail-defensible decision package PDF export
-              </li>
-            </ul>
+      {/* Scenario picker */}
+      <section className="pb-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+              Pre-Seeded Scenarios
+            </h2>
+            <span className="text-xs text-muted uppercase tracking-wider">
+              {scenarios.length} active, 2 coming next
+            </span>
           </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* Live scenarios from the API */}
+            {scenarios.map((s) => (
+              <ScenarioCard key={s.key} scenario={s} />
+            ))}
+
+            {/* Placeholders for the two scenarios coming next */}
+            <PlaceholderScenario
+              title="VBA Regional Office IT Help Desk"
+              agency="Veterans Benefits Administration"
+              ceiling="$4,000,000"
+              note="Coming next — 4-axis match returns 5 large IT integrators. EADIE surfaces 3 SDVOSB firms with modern-methodology premium scoring."
+            />
+            <PlaceholderScenario
+              title="OSDBU Outreach Services"
+              agency="Office of Small and Disadvantaged Business Utilization"
+              ceiling="$800,000"
+              note="Coming next — surfaces SDVOSB-owned community engagement firms with veteran-led specialized-domain depth. The OSDBU meta-punch."
+            />
+          </div>
+
+          {scenarios.length === 0 && (
+            <div className="mt-8 rounded-xl border border-red-500/30 bg-red-500/5 p-5 text-sm text-red-300">
+              <div className="font-semibold mb-1">⚠ EADIE engine not reachable</div>
+              <div className="text-xs text-red-300/80">
+                Scenarios could not be loaded from the Acumen-7 backend. The static
+                walkthrough at <Link href="/demo" className="text-accent hover:underline">/demo</Link> is still available.
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </main>
+  );
+}
+
+function ScenarioCard({ scenario }: { scenario: Scenario }) {
+  return (
+    <Link
+      href={`/sandbox/${scenario.key}`}
+      className="group block rounded-2xl border border-accent/30 bg-gradient-to-b from-white/[0.06] to-transparent backdrop-blur-sm p-6 hover:border-accent/60 hover:from-white/[0.10] hover:-translate-y-1 transition-all"
+    >
+      <div className="flex items-start justify-between mb-3">
+        <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold tracking-[0.18em] uppercase border border-accent/40 text-accent bg-accent/5">
+          ▶ Live
+        </span>
+        {scenario.set_aside && (
+          <span className="text-[10px] font-bold tracking-wider uppercase text-amber/80">
+            {scenario.set_aside}
+          </span>
+        )}
+      </div>
+      <h3 className="text-xl font-bold leading-tight tracking-tight mb-3 group-hover:text-accent transition-colors">
+        {scenario.title}
+      </h3>
+      <div className="space-y-1.5 text-sm text-muted">
+        <div>
+          <span className="text-light/60">Agency:</span>{" "}
+          <span className="text-light">{scenario.agency}</span>
+        </div>
+        <div>
+          <span className="text-light/60">Ceiling:</span>{" "}
+          <span className="text-light font-mono">
+            ${scenario.ceiling_usd.toLocaleString()}
+          </span>
+        </div>
+      </div>
+      <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+        <span className="text-[11px] uppercase tracking-wider text-accent/80 font-semibold">
+          Open workspace
+        </span>
+        <span className="text-accent group-hover:translate-x-1 transition-transform">→</span>
+      </div>
+    </Link>
+  );
+}
+
+function PlaceholderScenario({
+  title,
+  agency,
+  ceiling,
+  note,
+}: {
+  title: string;
+  agency: string;
+  ceiling: string;
+  note: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-6 opacity-60">
+      <div className="flex items-start justify-between mb-3">
+        <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold tracking-[0.18em] uppercase border border-white/15 text-muted">
+          ○ Coming next
+        </span>
+      </div>
+      <h3 className="text-xl font-bold leading-tight tracking-tight mb-3 text-light/80">
+        {title}
+      </h3>
+      <div className="space-y-1.5 text-sm text-muted">
+        <div>
+          <span className="text-light/40">Agency:</span>{" "}
+          <span className="text-light/70">{agency}</span>
+        </div>
+        <div>
+          <span className="text-light/40">Ceiling:</span>{" "}
+          <span className="text-light/70 font-mono">{ceiling}</span>
+        </div>
+      </div>
+      <p className="mt-4 text-xs text-muted/70 leading-relaxed">{note}</p>
+    </div>
   );
 }
