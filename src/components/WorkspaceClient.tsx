@@ -117,7 +117,34 @@ export function WorkspaceClient({ scenario }: { scenario: ScenarioFull }) {
   const [dimensions, setDimensions] = useState<DimensionRowState[]>([]);
   const [expandedDim, setExpandedDim] = useState<number | null>(null);
   const [activeCandidateId, setActiveCandidateId] = useState<string | null>(null);
+  const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+  const [persistenceMode, setPersistenceMode] = useState<string>("loading");
   const cancelRef = useRef<AbortController | null>(null);
+
+  // Create the persistent workspace on first load (audit trail starts here)
+  useEffect(() => {
+    let cancelled = false;
+    const create = async () => {
+      try {
+        const res = await fetch("/api/sandbox/workspace", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ scenario_key: scenario.key }),
+        });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (cancelled) return;
+        setWorkspaceId(data.workspace_id || null);
+        setPersistenceMode(data.persistence || "unknown");
+      } catch {
+        if (!cancelled) setPersistenceMode("in-memory-only");
+      }
+    };
+    create();
+    return () => {
+      cancelled = true;
+    };
+  }, [scenario.key]);
 
   // Trigger document ingestion animation on mount
   useEffect(() => {
@@ -155,7 +182,10 @@ export function WorkspaceClient({ scenario }: { scenario: ScenarioFull }) {
       const res = await fetch("/api/sandbox/analyze/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scenario_key: scenario.key }),
+        body: JSON.stringify({
+          scenario_key: scenario.key,
+          workspace_id: workspaceId,
+        }),
         signal: controller.signal,
       });
 
@@ -392,7 +422,21 @@ export function WorkspaceClient({ scenario }: { scenario: ScenarioFull }) {
         scenarioKey={scenario.key}
         scenarioTitle={scenario.title}
         analysisComplete={analysisComplete}
+        workspaceId={workspaceId}
       />
+
+      {/* Persistence status chip (subtle, bottom-left) */}
+      {workspaceId && persistenceMode === "enabled" && (
+        <div className="fixed bottom-6 left-6 z-30 text-[10px] uppercase tracking-[0.18em] text-muted/80 font-bold pointer-events-none">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-green-500/30 bg-green-500/5 text-green-300">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400"></span>
+            </span>
+            Audit trail · live
+          </span>
+        </div>
+      )}
 
       {/* Analysis in progress / complete */}
       {analysisStarted && (

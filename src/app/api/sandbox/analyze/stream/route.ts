@@ -12,7 +12,7 @@ const EADIE_API_URL = process.env.EADIE_API_URL || "http://localhost:8000";
  * happens on the Python side.
  */
 export async function POST(request: NextRequest) {
-  let body: { scenario_key?: string };
+  let body: { scenario_key?: string; workspace_id?: string };
   try {
     body = await request.json();
   } catch {
@@ -33,7 +33,10 @@ export async function POST(request: NextRequest) {
     const upstream = await fetch(`${EADIE_API_URL}/analyze/stream`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ scenario_key: body.scenario_key }),
+      body: JSON.stringify({
+        scenario_key: body.scenario_key,
+        workspace_id: body.workspace_id,
+      }),
       // No timeout signal; long-running stream by design
     });
 

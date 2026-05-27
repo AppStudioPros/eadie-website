@@ -15,12 +15,14 @@ interface AcumenChatPanelProps {
   // When the analysis runs, the parent can pass a key that flips when complete
   // so the panel can show an inviting opener bot message after results land.
   analysisComplete?: boolean;
+  workspaceId?: string | null;
 }
 
 export function AcumenChatPanel({
   scenarioKey,
   scenarioTitle,
   analysisComplete = false,
+  workspaceId = null,
 }: AcumenChatPanelProps) {
   const [open, setOpen] = useState(false);
   const [turns, setTurns] = useState<ChatTurn[]>([]);
@@ -75,6 +77,7 @@ export function AcumenChatPanel({
           scenario_key: scenarioKey,
           history,
           message: trimmed,
+          workspace_id: workspaceId,
         }),
       });
 

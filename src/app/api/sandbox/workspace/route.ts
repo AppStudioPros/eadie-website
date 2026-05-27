@@ -2,23 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-export const maxDuration = 60;
 
 const EADIE_API_URL = process.env.EADIE_API_URL || "http://localhost:8000";
 
-interface ChatTurn {
-  role: "user" | "assistant";
-  content: string;
-}
-interface ChatPayload {
-  scenario_key?: string;
-  history?: ChatTurn[];
-  message?: string;
-  workspace_id?: string;
-}
-
+/**
+ * Create a new persistent workspace for a scenario. Returns workspace_id
+ * the client uses for all subsequent analyze + chat calls.
+ */
 export async function POST(request: NextRequest) {
-  let body: ChatPayload;
+  let body: { scenario_key?: string };
   try {
     body = await request.json();
   } catch {
@@ -28,36 +20,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!body.scenario_key || !body.message) {
+  if (!body.scenario_key) {
     return NextResponse.json(
-      {
-        error: "missing_fields",
-        message: "scenario_key and message are required",
-      },
+      { error: "missing_scenario_key", message: "scenario_key is required" },
       { status: 400 }
     );
   }
 
   try {
-    const upstream = await fetch(`${EADIE_API_URL}/chat`, {
+    const upstream = await fetch(`${EADIE_API_URL}/workspace`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        scenario_key: body.scenario_key,
-        history: body.history || [],
-        message: body.message,
-        workspace_id: body.workspace_id,
-      }),
-      signal: AbortSignal.timeout(45000),
+      body: JSON.stringify({ scenario_key: body.scenario_key }),
+      signal: AbortSignal.timeout(10000),
     });
-
     if (!upstream.ok) {
-      const errText = await upstream.text().catch(() => "");
       return NextResponse.json(
         {
           error: "engine_unhealthy",
           message: `EADIE engine returned HTTP ${upstream.status}`,
-          detail: errText.slice(0, 240),
         },
         { status: 502 }
       );
