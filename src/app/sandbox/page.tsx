@@ -96,29 +96,14 @@ export default async function SandboxPage() {
               Pre-Seeded Scenarios
             </h2>
             <span className="text-xs text-muted uppercase tracking-wider">
-              {scenarios.length} active, 2 coming next
+              {scenarios.length} active
             </span>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {/* Live scenarios from the API */}
             {scenarios.map((s) => (
               <ScenarioCard key={s.key} scenario={s} />
             ))}
-
-            {/* Placeholders for the two scenarios coming next */}
-            <PlaceholderScenario
-              title="VBA Regional Office IT Help Desk"
-              agency="Veterans Benefits Administration"
-              ceiling="$4,000,000"
-              note="Coming next — 4-axis match returns 5 large IT integrators. EADIE surfaces 3 SDVOSB firms with modern-methodology premium scoring."
-            />
-            <PlaceholderScenario
-              title="OSDBU Outreach Services"
-              agency="Office of Small and Disadvantaged Business Utilization"
-              ceiling="$800,000"
-              note="Coming next — surfaces SDVOSB-owned community engagement firms with veteran-led specialized-domain depth. The OSDBU meta-punch."
-            />
           </div>
 
           {scenarios.length === 0 && (
@@ -177,38 +162,4 @@ function ScenarioCard({ scenario }: { scenario: Scenario }) {
   );
 }
 
-function PlaceholderScenario({
-  title,
-  agency,
-  ceiling,
-  note,
-}: {
-  title: string;
-  agency: string;
-  ceiling: string;
-  note: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-6 opacity-60">
-      <div className="flex items-start justify-between mb-3">
-        <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold tracking-[0.18em] uppercase border border-white/15 text-muted">
-          ○ Coming next
-        </span>
-      </div>
-      <h3 className="text-xl font-bold leading-tight tracking-tight mb-3 text-light/80">
-        {title}
-      </h3>
-      <div className="space-y-1.5 text-sm text-muted">
-        <div>
-          <span className="text-light/40">Agency:</span>{" "}
-          <span className="text-light/70">{agency}</span>
-        </div>
-        <div>
-          <span className="text-light/40">Ceiling:</span>{" "}
-          <span className="text-light/70 font-mono">{ceiling}</span>
-        </div>
-      </div>
-      <p className="mt-4 text-xs text-muted/70 leading-relaxed">{note}</p>
-    </div>
-  );
-}
+
