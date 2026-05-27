@@ -23,8 +23,10 @@ const VALID_TOKEN = sessionTokenFor(DEMO_PASSWORD);
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only guard the /demo branch
-  if (!pathname.startsWith("/demo")) {
+  // Guard the /demo branch (static walkthrough) AND the /sandbox branch
+  // (working Mid-Demo). Both share the same auth gate / cookie.
+  const isGuarded = pathname.startsWith("/demo") || pathname.startsWith("/sandbox") || pathname.startsWith("/api/sandbox");
+  if (!isGuarded) {
     return NextResponse.next();
   }
 
@@ -39,6 +41,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // For API requests under /api/sandbox, return 401 JSON instead of redirect
+  if (pathname.startsWith("/api/sandbox")) {
+    return new NextResponse(
+      JSON.stringify({ error: "Authentication required" }),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
   // No valid session — redirect to login, preserve original destination
   const loginUrl = new URL("/demo/login", request.url);
   loginUrl.searchParams.set("next", pathname);
@@ -46,5 +56,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/demo/:path*"],
+  matcher: ["/demo/:path*", "/sandbox/:path*", "/api/sandbox/:path*"],
 };
